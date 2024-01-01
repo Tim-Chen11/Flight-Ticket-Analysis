@@ -216,6 +216,28 @@ def scrape_logic():
         df = pd.DataFrame(columns=df_columns)
         return df
 
+    def connect_mail(username, password):
+        global server
+        server = smtplib.SMTP('smtp.outlook.com', 587)
+        server.ehlo()
+        server.starttls()
+        server.login(username, password)
+
+    def create_mag():
+        global msg
+        msg = f'\nCurrent Chpeast flight:\n\nDeparture and arrival time:{df[len(df)][0]}\nAirline:{df[len(df)][1]}\nFlight duration and stops:{df[len(df)][2]}\nlayovers:{df[len(df)][3]}\nPrice:{df[len(df)][4]}'
+
+    def send_email(msg):
+        sendMail = 'xlchen0411@gmail.com'
+        toBeSendMail = '2313249827@qq.com'
+        global message
+        message = MIMEMultipart()
+        message['Subject'] = 'Current Cheapest Flight'
+        message['From'] = sendMail
+        message['to'] = toBeSendMail
+
+        server.sendmail(sendMail,toBeSendMail,msg)
+
 
     driver = driver_setting()
     df = pd_initializer()
